@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title></title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css"
+		/>
+
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							primary: "#51C1AE",
+							danger: "#C22544",
+							success: "#287F54",
+							darkGrey: "#1d1d1f"
+						}
+					}
+				}
+			};
+		</script>
+		<script src="scripts.js"></script>
+	</head>
+	<body>
+		<form id="formPhoneNumber" method="POST">
+			<div class="flex flex-col w-full justify-center items-center">
+				<h1 class="my-4 font-bold text-2xl border-t border-b py-4">
+					Send SMS!
+				</h1>
+				<div class="flex flex-col md:w-[40%] w-full self-center">
+					<label for="phone" class="text-xs font-medium">Phone Number</label>
+					<input
+						id="phone"
+						type="tel"
+						class="border border-darkGrey rounded-md p-1 mt-2 w-full text-sm text-darkGrey"
+						name="phoneNumber"
+					/>
+					<span class="text-xs text-danger mt-1 invisible" id="error-msg"
+						>Error</span
+					>
+					<span
+						class="text-xs text-success mt-1 invisible"
+						id="valid-msg"
+					></span>
+					<button
+						class="mt-4 self-end bg-primary p-2 rounded-md text-white font-bold"
+						id="btn"
+						type="submit"
+					>
+						Send SMS
+					</button>
+				</div>
+			</div>
+		</form>
+		<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script>
+		<script type="text/javascript">
+			const input = document.querySelector("#phone");
+			const iti = window.intlTelInput(input, {
+				initialCountry: "auto",
+				geoIpLookup: (callback) => {
+					fetch("https://ipapi.co/json")
+						.then((res) => res.json())
+						.then((data) => callback(data.country_code))
+						.catch(() => callback("us"));
+				},
+				utilsScript:
+					"https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js" // just for formatting/placeholders etc
+			});
+		</script>
+		<script>
+			var form = document.getElementById("formPhoneNumber");
+			form.addEventListener("submit", submit, true);
+		</script>
+	</body>
+</html>
